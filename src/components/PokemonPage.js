@@ -8,6 +8,30 @@ const url = 'http://127.0.0.1:3001/pokemon'
 // - Render each Pokemon name, sprite, and hp in a card..oass diwn to collection then to card
 function PokemonPage() {
   const [pokemon, setPokemon] = useState([]);  
+  const [query, setQuery] = useState('');
+
+  const handleChange =(e)=>{
+    setQuery(e.target.value)
+  }
+  const queryFilter = pokemon.filter(poke =>{
+    if(poke.name.toLowerCase().includes(query.toLowerCase())){
+      return poke
+    }
+  })
+  const onHandleSubmit =(newPoke) =>{
+    fetch(url,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPoke)
+    })
+      .then(response => response.json())
+      .then(newPokeData => setPokemon([...pokemon, newPokeData]))
+  }
+
+
+
 
   useEffect(() =>{
     fetch(url)
@@ -20,11 +44,11 @@ function PokemonPage() {
     <Container>
       <h1>Pokemon Searcher</h1>
       <br />
-      <PokemonForm />
+      <PokemonForm onHandleSubmit={onHandleSubmit} />
       <br />
-      <Search />
+      <Search handleChange={handleChange} query={query}/>
       <br />
-      <PokemonCollection pokemon={pokemon} />
+      <PokemonCollection pokemon={queryFilter} />
     </Container>
   );
 }
