@@ -15,7 +15,7 @@ function PokemonForm({onHandleSubmit}) {
     setFormData({...formData, [e.target.name]: e.target.value})
   }
   const handleSubmit = (e) =>{
-    e.preventDefault()
+    e.preventDefa()
 
     const newPokeData = {
       name: formData.name,
